@@ -5,7 +5,7 @@ import { generateTokens } from "../utils/generateTokens";
 
 const client = new PrismaClient();
 
-const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response) => {
     try {
         const { username, email, password} = req.body;
 
@@ -55,7 +55,7 @@ const register = async (req: Request, res: Response) => {
     }
 }
 
-const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
     try {
         const { username, password } = req.body;
 
