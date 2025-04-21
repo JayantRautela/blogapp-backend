@@ -11,7 +11,7 @@ app.use(cookieParser());
 
 const PORT = process.env.PORT || 3001
 
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/auth', userRouter);
 
 app.listen(PORT, () => {
     console.log(`Server started at port ${PORT}`);
