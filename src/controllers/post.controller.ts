@@ -163,3 +163,34 @@ export const updatePost = async (req: Request, res: Response) => {
         })
     }
 }
+
+export const deletePost = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id as string;
+
+        if (!id) {
+            return res.status(400).json({
+                message: "Id is not provided",
+                success: false
+            });
+        }
+
+        await client.post.delete({
+            where: {
+                id: id
+            }
+        });
+
+        return res.status(200).json({
+            message: "Post deleted successfully",
+            success: true 
+        });
+    } catch (error: any) {
+        console.log(`Error:- ${error}`);
+        res.status(500).json({
+            message: "Some Error Occured",
+            success: false,
+            error: error
+        })
+    }
+}
