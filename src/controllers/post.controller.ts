@@ -126,4 +126,40 @@ export const addPost = async (req: Request, res: Response) => {
             error: error
         })
     }
-}   
+}  
+
+export const updatePost = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id as string;
+        const { title, content } = req.body;
+
+        if (!title || !content) {
+            return res.status(400).json({
+                message: "All fields are required",
+                success: false
+            });
+        }
+
+        const post = await client.post.update({
+            where: {
+                id: id
+            },
+            data: {
+                title: title as string,
+                content: content as string,
+            }
+        });
+
+        return res.status(200).json({
+            message: "Post updated successfully",
+            success: true
+        });
+    } catch (error: any) {
+        console.log(`Error:- ${error}`);
+        res.status(500).json({
+            message: "Some Error Occured",
+            success: false,
+            error: error
+        })
+    }
+}
