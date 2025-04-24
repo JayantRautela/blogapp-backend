@@ -134,3 +134,54 @@ export const login = async (req: Request, res: Response) => {
         })
     }
 }
+
+export const getUser = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+
+        if (!id) {
+            return res.status(400).json({
+                message: "Id is required",
+                success: false
+            });
+        }
+
+        const user = await client.user.findFirst({
+            where: {
+                id: id
+            },
+            select: {
+                username: true,
+                createdAt: true,
+                id: true,
+                posts: {
+                    select: {
+                        content: true,
+                        title: true,
+                        createdAt: true
+                    }
+                }
+            }
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                message: "User does not exist",
+                success: false
+            });
+        }
+
+        return res.status(200).json({
+            message: "User and posts fetched",
+            success: true,
+            user: user
+        })
+    } catch (error: any) {
+        console.log(`Error:- ${error}`);
+        return res.status(500).json({
+            message: "Some error occured",
+            success : false,
+            error: error
+        })
+    }
+}
