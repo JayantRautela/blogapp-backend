@@ -71,3 +71,49 @@ export const addComment = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const getComments = async (req: Request, res: Response) => {
+    try {
+        const postId = req.params.id;
+
+        if (!postId) {
+            return res.status(400).json({
+                message: "Post id is required",
+                success: false
+            });
+        }
+
+        const comments = await client.comment.findMany({
+            where: {
+                postId: postId
+            },
+            include: {
+                user: {
+                    select: {
+                        username: true,
+                    }
+                }
+            }
+        });
+
+        if (comments.length === 0) {
+            return res.status(200).json({
+                message: "No comments available for this video",
+                success: true,
+                comments: []
+            });
+        }
+
+        return res.status(200).json({
+            message: "All comments fteched",
+            success: true,
+            comments: comments
+        })
+    } catch (error: any) {
+        console.log(`Error:- ${error}`);
+        return res.status(500).json({
+            message: "Some error occured",
+            success: false
+        });
+    }
+}
